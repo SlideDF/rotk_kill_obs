@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="fr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>ROTK Kill Challenge</title>
+<style>
+:root{--red:#ff1738;--red-dark:#8f0017;--white:#f7f4f5;--gold:#ffc94d}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent;color:var(--white);font-family:Arial,Helvetica,sans-serif}
+body{display:flex;align-items:center;justify-content:center}
+.hud{width:760px;height:166px;position:relative;overflow:hidden;padding:17px 24px 13px;background:linear-gradient(100deg,rgba(5,5,8,.97),rgba(16,7,10,.95));border:1px solid rgba(255,35,61,.8);clip-path:polygon(2.5% 0,97.5% 0,100% 13%,100% 86%,97.5% 100%,2.5% 100%,0 86%,0 13%);box-shadow:0 0 25px rgba(255,0,30,.18)}
+.hud:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,transparent 0 14px,rgba(255,255,255,.018) 15px 16px),radial-gradient(ellipse at 16% 40%,rgba(255,0,30,.10),transparent 42%);pointer-events:none}
+.hud:after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--red);box-shadow:0 0 14px var(--red)}
+.top{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;height:27px}
+.brand{font-weight:1000;font-style:italic;font-size:19px;letter-spacing:1.5px;text-shadow:1px 2px 0 #68000d}.brand .crown{color:var(--red);font-size:15px;margin-right:4px}
+.subtitle{font-size:9px;letter-spacing:2.5px;font-weight:900;color:#bcb6bb;margin-top:1px}
+.live{font-size:9px;letter-spacing:1.7px;font-weight:900;color:#d8d3d6;border:1px solid rgba(255,23,56,.45);padding:5px 8px;background:rgba(255,23,56,.08)}
+.live:before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--red);margin:0 6px 1px 0;box-shadow:0 0 7px var(--red)}
+.middle{position:relative;z-index:1;display:flex;align-items:flex-end;justify-content:space-between;margin-top:11px}
+.left{display:flex;align-items:baseline;gap:12px}
+.label{font-size:16px;font-weight:1000;font-style:italic;letter-spacing:1px;color:#f2eff1;text-shadow:1px 1px 0 #555}
+.count{display:flex;align-items:baseline;gap:7px;font-weight:1000;font-style:italic;white-space:nowrap}
+.kills{font-size:47px;line-height:.95;letter-spacing:1px;color:var(--red);text-shadow:0 0 13px rgba(255,15,50,.35);font-variant-numeric:tabular-nums}
+.slash{font-size:20px;color:#eae7e9}.target{font-size:20px;color:#eae7e9}
+.stats{display:flex;align-items:flex-end;gap:22px}
+.percent{text-align:right;color:var(--red);font-size:17px;font-weight:1000;font-style:italic;min-width:42px}
+.percent small,.timer small{display:block;font-size:8px;letter-spacing:1.5px;color:#aaa4aa;font-style:normal;margin-top:3px}
+.timer{text-align:right;font-size:23px;font-weight:1000;font-variant-numeric:tabular-nums;min-width:105px;letter-spacing:.5px}
+.track{height:8px;margin-top:10px;background:linear-gradient(#262126,#070608);border:1px solid #50494f;position:relative;z-index:1;overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,#9c0018,#ff1738 70%,#ff9ba9);box-shadow:0 0 11px rgba(255,20,50,.9);transition:width .48s cubic-bezier(.18,.8,.3,1);position:relative}
+.fill:after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 15%,rgba(255,255,255,.85) 48%,transparent 78%);transform:translateX(-130%)}
+.bottom{position:relative;z-index:1;display:flex;justify-content:space-between;margin-top:6px;font-size:7px;font-weight:900;letter-spacing:1.5px;color:#aaa4aa}
+.remaining{color:#f2eff1}
+.flash{position:absolute;inset:0;border:2px solid var(--red);opacity:0;pointer-events:none;z-index:4}
+.hud.bump{animation:bump .34s ease-out}.hud.bump .flash{animation:flash .42s ease-out}.hud.bump .kills{animation:pop .38s cubic-bezier(.2,1.6,.5,1)}.hud.bump .fill:after{animation:sheen .58s ease-out}
+.hud.stage0{--stage:#39e6ff;--stage-glow:rgba(57,230,255,.35)}
+.hud.stage25{--stage:#b66cff;--stage-glow:rgba(182,108,255,.38)}
+.hud.stage50{--stage:#ff233f;--stage-glow:rgba(255,35,63,.38)}
+.hud.stage75{--stage:#ffc84a;--stage-glow:rgba(255,200,74,.38)}
+.hud.stage0:not(.done),.hud.stage25:not(.done),.hud.stage50:not(.done),.hud.stage75:not(.done){border-color:var(--stage);box-shadow:0 0 22px var(--stage-glow)}
+.hud.stage0:not(.done):after,.hud.stage25:not(.done):after,.hud.stage50:not(.done):after,.hud.stage75:not(.done):after{background:var(--stage);box-shadow:0 0 12px var(--stage)}
+.hud.stage0:not(.done) .kills,.hud.stage0:not(.done) .percent{color:#39e6ff;text-shadow:0 0 13px rgba(57,230,255,.4)}
+.hud.stage25:not(.done) .kills,.hud.stage25:not(.done) .percent{color:#b66cff;text-shadow:0 0 13px rgba(182,108,255,.4)}
+.hud.stage50:not(.done) .kills,.hud.stage50:not(.done) .percent{color:#ff233f;text-shadow:0 0 13px rgba(255,35,63,.4)}
+.hud.stage75:not(.done) .kills,.hud.stage75:not(.done) .percent{color:#ffc84a;text-shadow:0 0 13px rgba(255,200,74,.4)}
+.hud.stage0:not(.done) .fill{background:linear-gradient(90deg,#007c91,#39e6ff 70%,#c6faff);box-shadow:0 0 11px rgba(57,230,255,.8)}
+.hud.stage25:not(.done) .fill{background:linear-gradient(90deg,#6527a0,#b66cff 70%,#e8ceff);box-shadow:0 0 11px rgba(182,108,255,.8)}
+.hud.stage50:not(.done) .fill{background:linear-gradient(90deg,#8f0017,#ff233f 70%,#ff9ba9);box-shadow:0 0 11px rgba(255,35,63,.8)}
+.hud.stage75:not(.done) .fill{background:linear-gradient(90deg,#a66b00,#ffc84a 70%,#fff0b8);box-shadow:0 0 11px rgba(255,200,74,.8)}
+.pop-kill{position:absolute;z-index:6;left:50%;top:35px;transform:translate(-50%,10px) scale(.7);font-size:29px;font-weight:1000;font-style:italic;color:#fff;text-shadow:0 0 12px var(--red),0 2px 3px #000;opacity:0;pointer-events:none;white-space:nowrap}
+.hud.bump .pop-kill{animation:plusOne .75s cubic-bezier(.18,.8,.3,1) forwards}
+.hud.done{border-color:var(--gold);box-shadow:0 0 30px rgba(255,184,35,.28)}.hud.done:after{background:var(--gold);box-shadow:0 0 12px var(--gold)}.hud.done .kills,.hud.done .percent{color:var(--gold);text-shadow:0 0 14px rgba(255,200,74,.55)}
+.finish{display:none;position:absolute;inset:0;z-index:5;background:rgba(6,5,7,.97);align-items:center;justify-content:center;flex-direction:column;gap:2px;text-align:center}
+.finish strong{font-size:25px;color:var(--gold);font-style:italic;letter-spacing:2px;text-shadow:0 0 15px rgba(255,190,50,.5)}.finish span{font-size:8px;font-weight:900;letter-spacing:3px}
+.hud.done .finish{display:flex;animation:finale .45s ease-out}
+@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.022)}100%{transform:scale(1)}}@keyframes flash{0%{opacity:.9}100%{opacity:0}}@keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.16);color:white}100%{transform:scale(1)}}@keyframes sheen{to{transform:translateX(140%)}}@keyframes finale{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}@keyframes plusOne{0%{opacity:0;transform:translate(-50%,13px) scale(.7)}18%{opacity:1;transform:translate(-50%,-2px) scale(1.15)}62%{opacity:1;transform:translate(-50%,-21px) scale(1)}100%{opacity:0;transform:translate(-50%,-35px) scale(.95)}}
+</style></head>
+<body>
+<div class="hud" id="hud"><div class="flash"></div><div class="pop-kill" id="popKill">+1</div>
+ <div class="top"><div><div class="brand"><span class="crown">♛</span>ROTK</div><div class="subtitle">ROAD TO <span id="targetTop">200</span> KILLS</div></div></div>
+ <div class="middle"><div class="left"><div class="label">KILLS</div><div class="count"><span class="kills" id="kills">000</span><span class="slash">/</span><span class="target" id="target">200</span></div></div>
+ <div class="stats"><div class="timer"><span id="timer">00:00:00</span><small>TEMPS ÉCOULÉ</small></div><div class="percent"><span id="percent">0%</span><small>PROGRESSION</small></div></div></div>
+ <div class="track"><div class="fill" id="fill"></div></div>
+ <div class="bottom"><span class="remaining" id="remaining">200 RESTANTS</span></div>
+ <div class="finish"><strong>CHALLENGE TERMINÉ !</strong><span id="finishText">200 KILLS — GG !</span></div>
+</div>
+<script>
+const hud=document.getElementById('hud'),popKill=document.getElementById('popKill'),killsEl=document.getElementById('kills'),targetEl=document.getElementById('target'),targetTop=document.getElementById('targetTop'),percentEl=document.getElementById('percent'),fillEl=document.getElementById('fill'),remainingEl=document.getElementById('remaining'),timerEl=document.getElementById('timer'),finishText=document.getElementById('finishText');let lastKills=null,animTimer;
+function fmtTime(n){n=Math.max(0,n|0);return [Math.floor(n/3600),Math.floor(n%3600/60),n%60].map(v=>String(v).padStart(2,'0')).join(':')}
+function render(d){const target=Math.max(1,Number(d.target)||200),kills=Math.max(0,Math.min(target,Number(d.kills)||0)),pct=Math.round(kills/target*100);
+killsEl.textContent=String(kills).padStart(3,'0');targetEl.textContent=target;targetTop.textContent=target;percentEl.textContent=pct+'%';fillEl.style.width=pct+'%';remainingEl.textContent=Math.max(0,target-kills)+' RESTANTS';timerEl.textContent=fmtTime(d.elapsed||0);
+hud.classList.toggle('done',kills>=target);hud.classList.toggle('stage0',pct<25);hud.classList.toggle('stage25',pct>=25&&pct<50);hud.classList.toggle('stage50',pct>=50&&pct<75);hud.classList.toggle('stage75',pct>=75&&pct<100);
+finishText.textContent=target+' KILLS — GG !';
+if(lastKills!==null&&kills>lastKills){hud.classList.remove('bump');void hud.offsetWidth;hud.classList.add('bump');popKill.textContent='+'+(kills-lastKills);clearTimeout(animTimer);animTimer=setTimeout(()=>hud.classList.remove('bump'),780)}
+lastKills=kills}
+async function refresh(){try{const r=await fetch('/api/state',{cache:'no-store'});render(await r.json())}catch(e){}}
+refresh();setInterval(refresh,350);
+</script></body></html>
